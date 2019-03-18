@@ -8,8 +8,8 @@ import java.util.HashSet;
 
 public class LfuCache<KeyType, DataType> {
     // Instance Fields
-    private Map<KeyType, Item> mapCache; // bykey
-    private FreqNode headFreqNode; // freq_head
+    private Map<KeyType, Item> mapCache; // called bykey in pdf
+    private FreqNode headFreqNode; // called freq_head in pdf
     private final int capacity; // maximum capacity of cache
     private final int evictNumber; // number of Items to evictLfuItems if cache is at capacity and an additional item is being inserted
 
@@ -88,12 +88,12 @@ public class LfuCache<KeyType, DataType> {
     /**
      * Fetches an item with the least usage count (the least frequently used item) in the cache
      */
-    public synchronized Item getLfuItem() {
+    public synchronized DataType getLfuData() {
         if (mapCache.size() == 0) {
             throw new RuntimeException("The set is empty");
         }
 
-        return mapCache.get(headFreqNode.next.items.iterator().next());
+        return mapCache.get(headFreqNode.next.items.iterator().next()).data;
     }
 
     // Public Getter Methods
