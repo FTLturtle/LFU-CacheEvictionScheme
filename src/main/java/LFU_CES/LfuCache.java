@@ -16,8 +16,10 @@ public class LfuCache<KeyType, DataType> {
     // Constructors
 
     /**
-     * Constructor with eviction factor as a parameter (the eviction factor is the ratio between the capacity and the
-     * number of items evicted when capacity is reached)
+     * Constructs an empty cache with the specified maximum capacity and evict factor.
+     *
+     * @param capacity sets maximum number of entries the cache will hold
+     * @param evictFactor the ratio, from 0 to 1, between the capacity and the number of items evicted when capacity is reached
      */
     public LfuCache(int capacity, double evictFactor) {
         if (capacity <= 0 || evictFactor <= 0 || evictFactor > 1) {
@@ -31,7 +33,9 @@ public class LfuCache<KeyType, DataType> {
     }
 
     /**
-     * Constructor with eviction factor set to a default value of 0.05
+     * Constructs an empty cache with the specified maximum capacity and the default evict factor (0.05).
+     *
+     * @param capacity the maximum number of entries the cache will hold
      */
     public LfuCache(int capacity) {
         this(capacity, 0.05);
@@ -40,7 +44,12 @@ public class LfuCache<KeyType, DataType> {
     // Public Methods
 
     /**
-     * Accesses (fetches) an element from the LFU cache, simultaneously incrementing its usage count
+     * Accesses (fetches) a data element from the LFU cache, simultaneously incrementing its frequency.
+     * Returns the data element to which the specified key is mapped, or throws an exception if the cache does not
+     * contain a mapping for the key
+     *
+     * @param key the key whose associated value is to be returned
+     * @return the data element to which the specified key is mapped
      */
     public synchronized DataType access(KeyType key) {
         Item item = mapCache.get(key);
@@ -65,7 +74,12 @@ public class LfuCache<KeyType, DataType> {
     }
 
     /**
-     * Inserts a new element into the LFU cache
+     * Inserts a new data element into the LFU cache, initializing its frequency to 1.
+     * Associates the specified data element with the specified key in the cache. If the cache previously contained a
+     * mapping for the key, the old value is replaced.
+     *
+     * @param key key with which the data element is to be associated
+     * @param data data element to be associated with the specified key
      */
     public synchronized void insert(KeyType key, DataType data) {
         if (mapCache.containsKey(key)) {
@@ -87,6 +101,8 @@ public class LfuCache<KeyType, DataType> {
 
     /**
      * Fetches an item with the least usage count (the least frequently used item) in the cache
+     *
+     * @return the least frequently used data element in the cache
      */
     public synchronized DataType getLfuData() {
         if (mapCache.size() == 0) {
@@ -100,6 +116,8 @@ public class LfuCache<KeyType, DataType> {
 
     /**
      * Returns the current size (i.e., number of items) in the cache
+     *
+     * @return the current size (i.e., number of data elements) in the cache
      */
     public int size() {
         return mapCache.size();
@@ -107,6 +125,8 @@ public class LfuCache<KeyType, DataType> {
 
     /**
      * Returns the maximum capacity of the cache
+     *
+     * @return the maximum capacity of the cache
      */
     public int getCapacity() {
         return capacity;
@@ -114,6 +134,8 @@ public class LfuCache<KeyType, DataType> {
 
     /**
      * Returns the number of items that get evicted when the evict method gets called
+     *
+     * @return the number of items that get evicted when the evict method gets called
      */
     public int getEvictNumber() {
         return evictNumber;
@@ -122,8 +144,11 @@ public class LfuCache<KeyType, DataType> {
     // Private Helper Methods
 
     /**
-     * Creates a new frequency node with an access frequency value of 0 (zero), and whose prev and next fields point to
+     * Creates and returns a new frequency node with an access frequency value of 0 (zero), and whose prev and next fields point to
      * itself. This node will act as the head of the frequency node list.
+     *
+     * @return a new frequency node with an access frequency value of 0 (zero), and whose prev and next fields point to
+     * itself.
      */
     private FreqNode getHeadFreqNode() {
         FreqNode headFreqNode = new FreqNode(0);
@@ -134,7 +159,14 @@ public class LfuCache<KeyType, DataType> {
     }
 
     /**
-     * Creates a new node and set its previous and next pointers to prev and next
+     * Creates and returns a new frequency node with the specified frequency and sets its previous and next pointers to the
+     * specified prev and next nodes.
+     *
+     * @param frequency frequency of the new node being created
+     * @param prev previous node to the node being created
+     * @param next next node to the node being created
+     * @return a new frequency node with the specified frequency and sets its previous and next pointers to the
+     * specified prev and next nodes
      */
     private FreqNode getNewFreqNode(int frequency, FreqNode prev, FreqNode next) {
         FreqNode freqNode = new FreqNode(frequency);
@@ -147,7 +179,8 @@ public class LfuCache<KeyType, DataType> {
     }
 
     /**
-     * Removes (unlinks) a node from the linked list
+     * Removes (unlinks) the specified node from the frequency linked list.
+     * @param freqNode node to be removed (unlinked)
      */
     private void deleteNode(FreqNode freqNode) {
         freqNode.prev.next = freqNode.next;
@@ -155,7 +188,7 @@ public class LfuCache<KeyType, DataType> {
     }
 
     /**
-     * Evicts least frequently used items from the cache. The number of items removed is based on the evictNumber
+     * Evicts the least frequently used items from the cache. The number of items removed is based on the evictNumber
      */
     private void evictLfuItems() {
         KeyType key;
@@ -175,7 +208,10 @@ public class LfuCache<KeyType, DataType> {
     // Private Inner Classes
 
     /**
-     * Private Inner Class FreqNode
+     * Private Inner Class FreqNode.
+     *
+     * This frequency node will hold a frequency value, and holds a set of all the items
+     * that have been accessed a number of times equal to the frequency value.
      */
     private class FreqNode {
         int frequency;
@@ -190,7 +226,10 @@ public class LfuCache<KeyType, DataType> {
     }
 
     /**
-     * Private Inner Class Item
+     * Private Inner Class Item.
+     *
+     * This object holds a data element, and points to the frequency node that holds the
+     * frequency value equal to the number of times the data element has been accessed.
      */
     private class Item {
         DataType data;
