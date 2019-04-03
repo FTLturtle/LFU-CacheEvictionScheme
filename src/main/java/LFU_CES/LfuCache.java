@@ -8,8 +8,8 @@ import java.util.HashSet;
 
 public class LfuCache<KeyType, DataType> {
     // Instance Fields
-    private Map<KeyType, Item> mapCache; // called bykey in pdf
-    private FreqNode headFreqNode; // called freq_head in pdf
+    private Map<KeyType, Item> mapCache; // Map containing data elements mapped to keys. Called bykey in LFU paper
+    private FreqNode headFreqNode; // Head frequency node in frequency linked list. Called freq_head in LFU paper
     private final int capacity; // maximum capacity of cache
     private final int evictNumber; // number of Items to evict if cache is at capacity and an additional item is being inserted
 
