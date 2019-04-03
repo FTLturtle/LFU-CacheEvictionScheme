@@ -11,7 +11,7 @@ public class LfuCache<KeyType, DataType> {
     private Map<KeyType, Item> mapCache; // called bykey in pdf
     private FreqNode headFreqNode; // called freq_head in pdf
     private final int capacity; // maximum capacity of cache
-    private final int evictNumber; // number of Items to evictLfuItems if cache is at capacity and an additional item is being inserted
+    private final int evictNumber; // number of Items to evict if cache is at capacity and an additional item is being inserted
 
     // Constructors
 
