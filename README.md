@@ -1,4 +1,4 @@
-This project is done in Java, based on the scheme outlined in the paper below.
+This project is done in Java, based on the scheme outlined in the included paper.
 
 ### An O(1) algorithm for implementing the LFU cache eviction scheme
 #### Prof. Ketan Shah Anirban Mitra Dhruv Matani August 16, 2010
