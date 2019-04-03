@@ -45,7 +45,7 @@ public class LfuCache<KeyType, DataType> {
 
     /**
      * Accesses (fetches) a data element from the LFU cache, simultaneously incrementing its frequency.
-     * Returns the data element to which the specified key is mapped, or throws an exception if the cache does not
+     * Returns the data element to which the specified key is mapped, or throws a RuntimeException if the cache does not
      * contain a mapping for the key
      *
      * @param key the key whose associated value is to be returned
@@ -76,7 +76,7 @@ public class LfuCache<KeyType, DataType> {
     /**
      * Inserts a new data element into the LFU cache, initializing its frequency to 1.
      * Associates the specified data element with the specified key in the cache. If the cache previously contained a
-     * mapping for the key, the old value is replaced.
+     * mapping for the key, a RuntimeException is thrown.
      *
      * @param key key with which the data element is to be associated
      * @param data data element to be associated with the specified key
